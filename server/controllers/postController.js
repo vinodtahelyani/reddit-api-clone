@@ -1,9 +1,7 @@
 var {Post} = require('./../models/Post');
-var assert = require('assert');
+const postController = {};
 
-const postControllers = {};
-
-postControllers.post = (req,res)=>{
+postController.post = (req,res)=>{
     const {
         title,
         text,
@@ -25,15 +23,15 @@ postControllers.post = (req,res)=>{
     });
 };
 
-postControllers.getAll = (req,res)=>{
-    Post.find().populate({path:'_creator',select:"username -_id"}).then((posts)=>{
+postController.getAll = (req,res)=>{
+    Post.find().then((posts)=>{
         if(!posts)return res.status(201).send({message:'no post to show'}); 
         res.status(200).send(posts);     
     }).catch((e)=>{
         res.status(401).send(e.message);
     });
 };
-postControllers.getByUserId = (req,res)=>{
+postController.getByUserId = (req,res)=>{
     var userId = req.params.userId;
     Post.find({_creator:userId}).then((posts)=>{
         if(!posts)return res.status(200).send({message:'no post to show'});
@@ -43,4 +41,4 @@ postControllers.getByUserId = (req,res)=>{
     });
 };
 
-export default postControllers;
+export default postController;
